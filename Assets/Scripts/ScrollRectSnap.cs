@@ -13,8 +13,20 @@ public class ScrollRectSnap : MonoBehaviour
 	private int _distanceBetweenImages;
 	private int _currentImage;
 
-	private void Update()
+	void Update()
 	{
+		int bottomBoundry = 0;
+		if (Panel.localPosition.x > bottomBoundry)
+		{
+			Panel.localPosition = new Vector3(bottomBoundry, Panel.localPosition.y);
+		}
+
+		int topBoundry = - (ImageContainer.Length - 1) * 1920;
+		if (Panel.localPosition.x < topBoundry)
+		{
+			Panel.localPosition = new Vector3(topBoundry, Panel.localPosition.y);
+		}
+
 		Prepare();
 
 		for (int i = 0; i < ImageContainer.Length; i++)
@@ -64,9 +76,10 @@ public class ScrollRectSnap : MonoBehaviour
 		if (ImageContainer[0] && ImageContainer[1])
 		{
 			_distanceBetweenImages =
-				(int)
-					Mathf.Abs(ImageContainer[1].GetComponent<RectTransform>().anchoredPosition.x -
-					          ImageContainer[0].GetComponent<RectTransform>().anchoredPosition.x);
+				Mathf.RoundToInt(
+					Mathf.Abs(
+						ImageContainer[1].GetComponent<RectTransform>().anchoredPosition.x -
+						ImageContainer[0].GetComponent<RectTransform>().anchoredPosition.x));
 		}
 	}
 
